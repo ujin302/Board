@@ -17,7 +17,7 @@ public class BaseEntity {
     // 실행 시간
     @CreationTimestamp
     @Column(updatable = false) // 수정 시 관련 X
-    private LocalDateTime localDateTime;
+    private LocalDateTime createdTime;
 
     // 업데이트 시간
     @UpdateTimestamp

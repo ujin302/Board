@@ -4,7 +4,10 @@ import com.example.board.dto.BoardDTO;
 import com.example.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller // RestController로는 안됨...ㅠ
 @RequiredArgsConstructor
@@ -27,5 +30,14 @@ public class BoardControrller {
         System.out.println("BoardDTO = " + boardDTO);
         boardService.save(boardDTO);
         return "index";
+    }
+
+    @GetMapping
+    public String findAll(Model model) { // Model : Data를 가져와야할 때 사용
+        System.out.println("list");
+        // DB에서 전체 게시글 데이터를 가져와 list.html에 보여준다.
+       List<BoardDTO> boardDTOList = boardService.findAll(); // 여러개의 Data를 가져오기 위해 List
+       model.addAttribute("boardList", boardDTOList);
+        return "list";
     }
 }

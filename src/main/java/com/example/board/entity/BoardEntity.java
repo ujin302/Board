@@ -15,7 +15,7 @@ import lombok.*;
 @AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자를 생성
 @Entity // 해당 클래스를 JPA가 관리
 @Table(name = "tb_Board")
-public class BoardEntity {
+public class BoardEntity extends BaseEntity{
     // 1. Column 생성
 
     @Id // pk(기본키) 컬림 지정 필수
