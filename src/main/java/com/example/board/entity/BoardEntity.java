@@ -1,5 +1,6 @@
 package com.example.board.entity;
 
+import com.example.board.dto.BoardDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,18 +14,15 @@ import lombok.*;
 @NoArgsConstructor // 파라미터가 없는 디폴트 생성자를 생성
 @AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자를 생성
 @Entity // 해당 클래스를 JPA가 관리
-@Table(name = "tb_board")
+@Table(name = "tb_Board")
 public class BoardEntity {
-//    @Id // pk(기본키) 컬림 지정 필수
-//    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment : 데이터가 삽입될 때마다 1씩 증가
-//    @Column(name = "id",nullable = false)
-//    private Integer id;
-    // 컬럼명을 생략하면 필드명을 컬럼명으로 사용
-//    private String writer;
-@Id // pk(기본키) 컬림 지정 필수
-@GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-private Long id;
+    // 1. Column 생성
 
+    @Id // pk(기본키) 컬림 지정 필수
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment : 데이터가 삽입될 때마다 1씩 증가
+    private Long id;
+
+    // 컬럼명을 생략하면 필드명을 컬럼명으로 사용
     @Column(length = 20, nullable = false) // 크기 20, not null
     private String boardWriter;
 
@@ -39,4 +37,16 @@ private Long id;
 
     @Column
     private int boardHits;
+
+    // 2. Data Entitiy에 저장
+    // DTO의 값들을 Entity에 옮겨담는 함수 생성
+    public static BoardEntity toSaveEntitiy(BoardDTO boardDTO) {
+        BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setBoardWriter(boardDTO.getBoardWriter());
+        boardEntity.setBoardPass(boardDTO.getBoardPass());
+        boardEntity.setBoardTitle(boardDTO.getBoardTitle());
+        boardEntity.setBoardContents(boardDTO.getBoardContents());
+        boardEntity.setBoardHits(0);
+        return boardEntity;
+    }
 }
