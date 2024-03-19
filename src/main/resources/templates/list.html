@@ -9,12 +9,13 @@
     <tr>
         <th>id</th>
         <th>title</th>
-        <th>title(||쓰지 않은 경우)</th>
+        <th>title</th>
         <th>writer</th>
         <th>date</th>
         <th>hits</th>
     </tr>
 <!--    th:each 는 반복문-->
+<!--    boardList 안에 서버에서 받은 DTO 객체 있음 -->
     <tr th:each="board: ${boardList}">
 <!--        반복문 수행 작업-->
         <td th:text="${board.id}"></td>

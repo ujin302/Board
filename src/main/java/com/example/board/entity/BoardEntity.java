@@ -41,7 +41,20 @@ public class BoardEntity extends BaseEntity{
     // 2. Data Entitiy에 저장
     // DTO의 값들을 Entity에 옮겨담는 함수 생성
     public static BoardEntity toSaveEntitiy(BoardDTO boardDTO) {
+        // id값(기본키)가 없음 -> repository에서 insert로 인식
         BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setBoardWriter(boardDTO.getBoardWriter());
+        boardEntity.setBoardPass(boardDTO.getBoardPass());
+        boardEntity.setBoardTitle(boardDTO.getBoardTitle());
+        boardEntity.setBoardContents(boardDTO.getBoardContents());
+        boardEntity.setBoardHits(0);
+        return boardEntity;
+    }
+
+    public static BoardEntity toUpdateEntity(BoardDTO boardDTO) {
+        // id값(기본키)가 있음 -> repository에서 update로 인식
+        BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setId(boardDTO.getId());
         boardEntity.setBoardWriter(boardDTO.getBoardWriter());
         boardEntity.setBoardPass(boardDTO.getBoardPass());
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());

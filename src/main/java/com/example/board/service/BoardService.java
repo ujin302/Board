@@ -31,6 +31,7 @@ public class BoardService {
     // 2. List DTO 객체에 저장
     public List<BoardDTO> findAll() {
         // Repository에 Data를 들고 올떄는 대부분 Entity로 들고 온다!
+        // findAll : 모든 DB 데이터 들고 오기
         List<BoardEntity> boardEntityList = boardRepository.findAll();
         List<BoardDTO> boardDTOList = new ArrayList<>();
 
@@ -75,6 +76,19 @@ public class BoardService {
         } else {
             return null;
         }
+    }
+
+    public BoardDTO update(BoardDTO boardDTO) {
+        // DB 데이터 수정을 위해 Entity로 변환
+        BoardEntity boardEntity = BoardEntity.toUpdateEntity(boardDTO);
+
+        // save : insert 혹은 update 로 인식
+        // id값(기본키)가 없으면 insert로 없으면 update로 인식함.
+        boardRepository.save(boardEntity);
+
+        return findById(boardDTO.getId());
+        // 위에 있는 findById를 호출하여 DTO 객체 반환
+        // 화면 상에 보여질 데이터는 DTO 객체 사용
     }
 }
 
