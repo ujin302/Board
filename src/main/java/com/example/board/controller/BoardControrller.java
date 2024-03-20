@@ -3,6 +3,9 @@ package com.example.board.controller;
 import com.example.board.dto.BoardDTO;
 import com.example.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -118,6 +121,27 @@ public class BoardControrller {
 
         return "redirect:/board";
     }
+
+    //7. 페이징 처리
+    /*
+
+     */
+    // /board/paging?page=1
+    @GetMapping("/paging")
+    public String paging(@PageableDefault(page = 1) Pageable pageable, Model model) {
+        // @PageableDefault(page = 1) -> 디폴트 1 설정
+        // pageable -> page 번호 가져옴
+
+        // 페이지 화면에 보여질 아이템 개수와 그에 따른 페이지 개수가 필요함
+        // 현재 로직에서는 지정되어 있는 아이템 개수로 페이징 처리할 거임
+        // 개수 지정에 관련한 것들은 추후에 개발
+//        pageable.getPageNumber(); // 현재 보고서 페이지 번호를 리턴
+        Page<BoardDTO> boardList = boardService.paging(pageable);
+
+
+        return "list";
+    }
+
 }
 
 

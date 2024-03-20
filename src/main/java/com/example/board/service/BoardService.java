@@ -5,6 +5,10 @@ import com.example.board.entity.BoardEntity;
 import com.example.board.repository.BoardRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
@@ -93,6 +97,24 @@ public class BoardService {
 
     public void delete(Long id) {
         boardRepository.deleteById(id); // 해당 id 값의 관련 데이터 삭제
+    }
+
+    public Page<BoardDTO> paging(Pageable pageable) {
+        // 한페이지당 3개씩 아이템을 보여줌 & id 컬럼 기준으로 내리차순 정렬
+
+        int page = pageable.getPageNumber() - 1; // page 위치에 있는 값은 0부터 시작
+        int pageLimit = 3; // 한 페이지에 보여줄 아이템 개수
+
+        // 페이징 처리된 데이터 가져오기!
+        Page<BoardEntity> boardEntities = boardRepository.findAll(
+                PageRequest.of(
+                        page, // 0 부터 시작함. 따라서 화면에 10 페이지를 요청하면 9 페이지로 데이터를 찾아야함
+                        pageLimit,
+                        Sort.by(Sort.Direction.DESC, "id") // id 컬럼을 기준으로 하여 내림차순 정렬
+                )
+        );
+
+
     }
 }
 
