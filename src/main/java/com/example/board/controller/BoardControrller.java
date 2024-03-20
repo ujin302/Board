@@ -106,7 +106,18 @@ public class BoardControrller {
         // 따라서 첫번째 방식으로 사용
     }
 
+    //6. 게시글 삭제
+    /*
+        1. 삭제 버튼 클릭
+        2. DB에서 데이터 삭제
+        3. 목록 화면 보여주기
+     */
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        boardService.delete(id);
 
+        return "redirect:/board";
+    }
 }
 
 

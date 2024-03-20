@@ -90,6 +90,10 @@ public class BoardService {
         // 위에 있는 findById를 호출하여 DTO 객체 반환
         // 화면 상에 보여질 데이터는 DTO 객체 사용
     }
+
+    public void delete(Long id) {
+        boardRepository.deleteById(id); // 해당 id 값의 관련 데이터 삭제
+    }
 }
 
 
