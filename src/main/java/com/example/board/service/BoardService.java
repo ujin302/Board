@@ -82,6 +82,7 @@ public class BoardService {
         }
     }
 
+    // 5. 게시글 수정
     public BoardDTO update(BoardDTO boardDTO) {
         // DB 데이터 수정을 위해 Entity로 변환
         BoardEntity boardEntity = BoardEntity.toUpdateEntity(boardDTO);
@@ -95,13 +96,14 @@ public class BoardService {
         // 화면 상에 보여질 데이터는 DTO 객체 사용
     }
 
+    // 6. 게시글 삭제
     public void delete(Long id) {
         boardRepository.deleteById(id); // 해당 id 값의 관련 데이터 삭제
     }
 
+    // 7. 페이징 처리
     public Page<BoardDTO> paging(Pageable pageable) {
         // 한페이지당 3개씩 아이템을 보여줌 & id 컬럼 기준으로 내리차순 정렬
-
         int page = pageable.getPageNumber() - 1; // page 위치에 있는 값은 0부터 시작
         int pageLimit = 3; // 한 페이지에 보여줄 아이템 개수
 
@@ -114,7 +116,32 @@ public class BoardService {
                 )
         );
 
+        System.out.println("boardEntities.getContent() = " + boardEntities.getContent()); // 요청 페이지에 해당하는 글
+        System.out.println("boardEntities.getTotalElements() = " + boardEntities.getTotalElements()); // 전체 글갯수
+        System.out.println("boardEntities.getNumber() = " + boardEntities.getNumber()); // DB로 요청한 페이지 번호
+        System.out.println("boardEntities.getTotalPages() = " + boardEntities.getTotalPages()); // 전체 페이지 갯수
+        System.out.println("boardEntities.getSize() = " + boardEntities.getSize()); // 한 페이지에 보여지는 글 갯수
+        System.out.println("boardEntities.hasPrevious() = " + boardEntities.hasPrevious()); // 이전 페이지 존재 여부
+        System.out.println("boardEntities.isFirst() = " + boardEntities.isFirst()); // 첫 페이지 여부
+        System.out.println("boardEntities.isLast() = " + boardEntities.isLast()); // 마지막 페이지 여부
 
+        // 객체 변환 필요 : Entity -> DTO
+        // findAll 함수 처럼 List<BoardDTO> 형태로 받으면 Page 객체에서 사용할 수 있는 메소드를 사용할 수 없음.
+        // 따라서 Page<BoardDTO> 객체로 변환할거임.
+        Page<BoardDTO> boardDTOS = boardEntities.map(
+                // board : Entity 객체
+                // map 메소드 : for문 처럼 하나씩 뽑아옴
+                board -> new BoardDTO(
+                        // 목록 : id, Writer, Title, Hits, CreatedTime
+                        board.getId(),
+                        board.getBoardWriter(),
+                        board.getBoardTitle(),
+                        board.getBoardHits(),
+                        board.getCreatedTime()
+                )
+        );
+        // boardDTOS : 'id, Writer, Title, Hits, CreatedTime' 을 가지고 있으며 Page 객체의 메소드 활용 가능
+        return boardDTOS;
     }
 }
 

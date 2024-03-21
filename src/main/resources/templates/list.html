@@ -9,7 +9,7 @@
     <tr>
         <th>id</th>
         <th>title</th>
-        <th>title</th>
+<!--        <th>title</th>-->
         <th>writer</th>
         <th>date</th>
         <th>hits</th>
@@ -19,8 +19,9 @@
     <tr th:each="board: ${boardList}">
 <!--        반복문 수행 작업-->
         <td th:text="${board.id}"></td>
+<!--        | | 가 없으면 컨트롤러부터 받은 데이터 값을 가져오지 않고 board.id로 읽게 된다. 주소에만 해당한다 -->
         <td><a th:href="@{|/board/${board.id}|}" th:text="${board.boardTitle}"></a></td>
-        <td><a th:href="@{/board/${board.id}}" th:text="${board.boardTitle}"></a></td>
+<!--        <td><a th:href="@{/board/${board.id}}" th:text="${board.boardTitle}"></a></td>-->
         <td th:text="${board.boardWriter}"></td>
         <td th:text="*{#temporals.format(board.boardCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
         <td th:text="${board.boardHits}"></td>

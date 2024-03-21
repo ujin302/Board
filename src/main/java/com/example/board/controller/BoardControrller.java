@@ -59,7 +59,8 @@ public class BoardControrller {
 
     // 4. detail.html에 상세 화면 뿌리기
     @GetMapping("/{id}") // board/id
-    public String findById(@PathVariable Long id, Model model) {
+    public String findById(@PathVariable Long id, Model model,
+                           @PageableDefault(page=1) Pageable pageable) {
         // @PathVariable : 경로 상에 있는 값을 가져올 때 사용
         // Model : spring이 지원하는 기능으로 HashMap (Key, Vaule 존재)
 
@@ -74,6 +75,7 @@ public class BoardControrller {
         // 4-2. 데이터 뿌리기
         BoardDTO boardDTO = boardService.findById(id);
         model.addAttribute("board", boardDTO);
+        model.addAttribute("page", pageable.getPageNumber());
 
         return "detail";
     }
@@ -124,7 +126,8 @@ public class BoardControrller {
 
     //7. 페이징 처리
     /*
-
+        1. 페이지 정보 리턴
+        2. 하단 페이지 관련 변수 설졍
      */
     // /board/paging?page=1
     @GetMapping("/paging")
@@ -136,10 +139,29 @@ public class BoardControrller {
         // 현재 로직에서는 지정되어 있는 아이템 개수로 페이징 처리할 거임
         // 개수 지정에 관련한 것들은 추후에 개발
 //        pageable.getPageNumber(); // 현재 보고서 페이지 번호를 리턴
+        // 1. 페이지 정보 리턴
         Page<BoardDTO> boardList = boardService.paging(pageable);
 
+        // 2. 하단 페이지 관련 변수 설졍
+        int blockLimit = 3; // 하단에 보이는 페이지 개수
+        // 현재 페이지가 2 or 3 일 경우 시작 페이지 1
+        // 현재 페이지가 8 or 9 일 경우 시작 페이지 7
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
 
-        return "list";
+        // 총 페이지가 8일 경우 마지막 숫자는 8로 나올 수 있도록
+        int endPage = ((startPage + blockLimit - 1) < boardList.getTotalPages()) ? startPage + blockLimit - 1 : boardList.getTotalPages();
+
+        // 현재 사용자 : 3
+        // 1 2 3
+        // 현재 사용자 : 7
+        // 7 8 9
+
+        // 3. Model 객체에 필요 정보 담기
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        return "paging";
     }
 
 }
