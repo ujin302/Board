@@ -38,6 +38,9 @@ public class BoardEntity extends BaseEntity{
     @Column
     private int boardHits;
 
+    @Column
+    private int fileAttached; // 파일 있으면 1 없으면 0
+
     // 2. Data Entitiy에 저장
     // DTO의 값들을 Entity에 옮겨담는 함수 생성
     public static BoardEntity toSaveEntitiy(BoardDTO boardDTO) {
@@ -48,6 +51,7 @@ public class BoardEntity extends BaseEntity{
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         boardEntity.setBoardHits(0);
+        boardEntity.setFileAttached(0); // 첨부 파일 X
         return boardEntity;
     }
 

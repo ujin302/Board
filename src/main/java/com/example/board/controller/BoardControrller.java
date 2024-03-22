@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 // 컨트롤러란?
@@ -31,7 +32,7 @@ public class BoardControrller {
 
     // 2. board/save 화면에서 '글작성' Button 클릭 시, DB에 데이터 저장 & index 화면 넘어감
     @PostMapping("/save")
-    public String save(@ModelAttribute BoardDTO boardDTO) {
+    public String save(@ModelAttribute BoardDTO boardDTO) throws IOException {
         // ModelAttribute : BoardDTO에 정의되어 있는 값들 받음
         System.out.println("BoardDTO = " + boardDTO);
         // DB에 데이터 저장
@@ -163,6 +164,25 @@ public class BoardControrller {
 
         return "paging";
     }
+
+    // 8. 파일(이미지) 첨부하기
+    /*
+        파일 첨부와 관련하여 추가될 부분들
+        - save.html
+            -> 글 작성 시, 파일 첨부
+        - BoardDTo
+            -> 첨부 파일 Data 전달
+        - BoardService.save()
+            -> 첨부 파일 확인
+            -> 첨부 파일 저장 공간에 저장
+        - BoardEntity
+            -> 파일과 관련된 컬럼 추가
+        - detail.html
+            -> 상세페이지에 첨부 파일 있으면 보여주기
+        - BoardFileEntity, BoardFileRepository 자바 클래스 추가
+            -> DB에는 파일 자체를 저장하는 것이 아닌 파일명칭만 저장함
+            -> 파일 자체는 서버 안에 저장
+     */
 
 }
 

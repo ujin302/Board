@@ -11,7 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,12 +27,38 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     // 1. DB에 Data 저장
-    public void save(BoardDTO boardDTO) {
-        // DTO의 값들을 Entity에 옮겨담는 함수 호출
-        BoardEntity boardEntity = BoardEntity.toSaveEntitiy(boardDTO);
-        // save : JPA가 가지고 있는 함수
-        // DB에 저장
-        boardRepository.save(boardEntity);
+    public void save(BoardDTO boardDTO) throws IOException {
+        // throws IOException : save 메소드에서 발생한 예외를 상위 메소드인 BoardService 에서 처리하기 위해 사용
+        // 상위에서 처리하는게 더 올바른 경우도 있고 해당 메소드에서 처리하는게 더 올바른 경우가 있다!
+
+        // 파일 첨부 여부에 따라 로직 분리
+        if(boardDTO.getBoardFile().isEmpty()) {
+            // 첨부 파일 X
+
+            // DTO의 값들을 Entity에 옮겨담는 함수 호출
+            BoardEntity boardEntity = BoardEntity.toSaveEntitiy(boardDTO);
+            // save : JPA가 가지고 있는 함수
+            // DB에 저장
+            boardRepository.save(boardEntity);
+        } else {
+            // 파일 첨부 ㅇ
+            /*
+                1. DTO에 담긴 파일 추출 (실제 파일)
+                2. 파일의 이름  추출
+                3. 서버 저장용 이름 생성
+                    : 내사진.jpg -> 8397980824_내사진.jpg
+                4. 저장 경로 설정
+                5. 해당 경로에 파일 저장
+                6. tb_Board 에 해당 데이터 save 처리 (-> 게시물 관련 Data)
+                7. tb_Board_File 에 해당 데이터 save 처리 (-> 첨부파일 관련 Data)
+             */
+            MultipartFile boardFile = boardDTO.getBoardFile(); // 1
+            String originalFilename = boardFile.getOriginalFilename(); // 2
+            String storedFileName = System.currentTimeMillis() + " " + originalFilename; // 3
+            String savePath = "E:/Board_File/" + storedFileName; // 4. 실제 존재하는 경로 값
+            boardFile.transferTo(new File(savePath)); // 5
+            // transferTo : 예외 발생 가능성으로 인해서 throws IOException 사용
+        }
     }
 
     // 2. List DTO 객체에 저장
