@@ -4,6 +4,9 @@ import com.example.board.dto.BoardDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // DB의 테이블 역할을 하는 클래스
 
 // Entity : JPA가 관리하는 클래스
@@ -41,6 +44,16 @@ public class BoardEntity extends BaseEntity{
     @Column
     private int fileAttached; // 파일 있으면 1 없으면 0
 
+    // 연관관계 : 부모
+    @OneToMany(
+            mappedBy = "boardEntity", // mappedBy : 어떤 것과 매핑?
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<BoardFileEntity> boardFileEntityList = new ArrayList<>(); // DB 상에는 List 형식으로 정의되는 것은 아님
+
+
     // 2. Data Entitiy에 저장
     // DTO의 값들을 Entity에 옮겨담는 함수 생성
     public static BoardEntity toSaveEntitiy(BoardDTO boardDTO) {
@@ -64,6 +77,17 @@ public class BoardEntity extends BaseEntity{
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         boardEntity.setBoardHits(0);
+        return boardEntity;
+    }
+
+    public static BoardEntity toSaveFileEntitiy(BoardDTO boardDTO) {
+        BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setBoardWriter(boardDTO.getBoardWriter());
+        boardEntity.setBoardPass(boardDTO.getBoardPass());
+        boardEntity.setBoardTitle(boardDTO.getBoardTitle());
+        boardEntity.setBoardContents(boardDTO.getBoardContents());
+        boardEntity.setBoardHits(0);
+        boardEntity.setFileAttached(1); // 첨부 파일 ㅇ
         return boardEntity;
     }
 }

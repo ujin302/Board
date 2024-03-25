@@ -2,6 +2,8 @@ package com.example.board.service;
 
 import com.example.board.dto.BoardDTO;
 import com.example.board.entity.BoardEntity;
+import com.example.board.entity.BoardFileEntity;
+import com.example.board.repository.BoardFileRepository;
 import com.example.board.repository.BoardRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,20 +27,22 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final BoardFileRepository boardFileRepository;
 
     // 1. DB에 Data 저장
     public void save(BoardDTO boardDTO) throws IOException {
-        // throws IOException : save 메소드에서 발생한 예외를 상위 메소드인 BoardService 에서 처리하기 위해 사용
+        // throws IOException : save 메소드에서 발생한 예외를 상위 메소드인 BoardService 에서 처리하기 위해 사용Z
         // 상위에서 처리하는게 더 올바른 경우도 있고 해당 메소드에서 처리하는게 더 올바른 경우가 있다!
 
         // 파일 첨부 여부에 따라 로직 분리
         if(boardDTO.getBoardFile().isEmpty()) {
             // 첨부 파일 X
 
-            // DTO의 값들을 Entity에 옮겨담는 함수 호출
+            // 1. DTO의 값들을 Entity에 옮겨담는 함수 호출
             BoardEntity boardEntity = BoardEntity.toSaveEntitiy(boardDTO);
+
+            // 2. DB에 저장 (tb_board)
             // save : JPA가 가지고 있는 함수
-            // DB에 저장
             boardRepository.save(boardEntity);
         } else {
             // 파일 첨부 ㅇ
@@ -57,11 +61,23 @@ public class BoardService {
             String storedFileName = System.currentTimeMillis() + " " + originalFilename; // 3
             String savePath = "E:/Board_File/" + storedFileName; // 4. 실제 존재하는 경로 값
             boardFile.transferTo(new File(savePath)); // 5
-            // transferTo : 예외 발생 가능성으로 인해서 throws IOException 사용
+            // transferTo : 파일 저장 메소드 & 예외 발생 가능성으로 인해서 throws IOException 사용
+
+            // 6
+            BoardEntity boardEntity = BoardEntity.toSaveFileEntitiy(boardDTO); // 6-1. DTO -> Entity (id값이 없다)
+            Long savedId = boardRepository.save(boardEntity).getId(); // 6-2. Entity 객체 저장(tb_board) & 저장한 id 가져오기
+            System.out.println("저장한 ID (첨부파일 O ) : " + savedId);
+            BoardEntity board = boardRepository.findById(savedId).get(); // 6-3. 저장한 id에 대한 Data 가져오기
+
+            // 7
+            BoardFileEntity boardFileEntity = BoardFileEntity.toBoardFileEntity(board, originalFilename, storedFileName); // 7-1. File Entity에 저장
+            boardFileRepository.save(boardFileEntity); // 7-2. DB에 저장 (tb_board_file)
         }
     }
 
     // 2. List DTO 객체에 저장
+    @Transactional // 부모 Entity에서 자식 Entity 접근 시(toBoardDTO) 필수 사용!
+
     public List<BoardDTO> findAll() {
         // Repository에 Data를 들고 올떄는 대부분 Entity로 들고 온다!
         // findAll : 모든 DB 데이터 들고 오기
@@ -70,6 +86,7 @@ public class BoardService {
 
         // Entity 객체를 DTO에 담기
         for(BoardEntity boardEntity: boardEntityList) {
+            // toBoardDTO 함수에서 부모 Entity를 통해 자식 Entity 접근
             System.out.println(BoardDTO.toBoardDTO(boardEntity));
             boardDTOList.add(BoardDTO.toBoardDTO(boardEntity));
         }
@@ -88,6 +105,7 @@ public class BoardService {
     }
 
     // 4. id가 있을 경우, 해당 데이터를 가지고 있는 DTO 반환
+    @Transactional // 부모 Entity에서 자식 Entity 접근 시(toBoardDTO) 필수 사용!
     public BoardDTO findById(Long id) {
         // 방법 1. Optional 형태로 데이터 받기
         // Optional : NPE(NullPoinrerException) 방지, null 반환 시, 오류 발생 가능성이 높은 경우 사용
@@ -105,6 +123,7 @@ public class BoardService {
         BoardEntity BoardEntity = boardRepository.findById(id).orElse(null);
         if(BoardEntity != null) {
             BoardDTO boardDTO = BoardDTO.toBoardDTO(BoardEntity); // Entity 객체를 DTO 객체에 저장
+            // toBoardDTO 함수에서 부모 Entity를 통해 자식 Entity 접근
             return boardDTO; // DTO 객체 반환
         } else {
             return null;

@@ -4,6 +4,7 @@ package com.example.board.dto;
 // 객체를 담을 클래스
 
 import com.example.board.entity.BoardEntity;
+import com.example.board.entity.BoardFileEntity;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,6 +60,15 @@ public class BoardDTO {
         boardDTO.setBoardHits(boardEntity.getBoardHits());
         boardDTO.setBoardCreatedTime(boardEntity.getCreatedTime());
         boardDTO.setBoardUpdatedTime(boardEntity.getUpdatedTime());
+        boardDTO.setFileAttached(boardEntity.getFileAttached());
+
+
+        if(boardEntity.getFileAttached() == 1) { // 파일 있음
+            // 파일 이름 가져오기
+            // OriginalFileName, StoredFileName : tb_board_file(BoardFileEntity)
+            boardDTO.setOriginalFileName(boardEntity.getBoardFileEntityList().get(0).getOriginalFileName());
+            boardDTO.setStoredFileName(boardEntity.getBoardFileEntityList().get(0).getStoredFileName());
+        }
 
         return boardDTO;
     }
