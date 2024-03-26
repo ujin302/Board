@@ -56,6 +56,7 @@ public class BoardService {
                 6. tb_Board 에 해당 데이터 save 처리 (-> 게시물 관련 Data)
                 7. tb_Board_File 에 해당 데이터 save 처리 (-> 첨부파일 관련 Data)
              */
+            /* 단일 첨부 파일
             MultipartFile boardFile = boardDTO.getBoardFile(); // 1
             String originalFilename = boardFile.getOriginalFilename(); // 2
             String storedFileName = System.currentTimeMillis() + " " + originalFilename; // 3
@@ -72,6 +73,26 @@ public class BoardService {
             // 7
             BoardFileEntity boardFileEntity = BoardFileEntity.toBoardFileEntity(board, originalFilename, storedFileName); // 7-1. File Entity에 저장
             boardFileRepository.save(boardFileEntity); // 7-2. DB에 저장 (tb_board_file)
+             */
+
+            // 다중 첨부 파일
+            // 6
+            BoardEntity boardEntity = BoardEntity.toSaveFileEntitiy(boardDTO); // 6-1. DTO -> Entity (id값이 없다)
+            Long savedId = boardRepository.save(boardEntity).getId(); // 6-2. Entity 객체 저장(tb_board) & 저장한 id 가져오기
+            System.out.println("저장한 ID (첨부파일 O ) : " + savedId);
+            BoardEntity board = boardRepository.findById(savedId).get(); // 6-3. 저장한 id에 대한 Data 가져오기
+
+            for (MultipartFile boardFile : boardDTO.getBoardFile()) {
+                String originalFilename = boardFile.getOriginalFilename(); // 2
+                String storedFileName = System.currentTimeMillis() + " " + originalFilename; // 3
+                String savePath = "E:/Board_File/" + storedFileName; // 4. 실제 존재하는 경로 값
+                boardFile.transferTo(new File(savePath)); // 5
+                // transferTo : 파일 저장 메소드 & 예외 발생 가능성으로 인해서 throws IOException 사용
+
+                // 7
+                BoardFileEntity boardFileEntity = BoardFileEntity.toBoardFileEntity(board, originalFilename, storedFileName); // 7-1. File Entity에 저장
+                boardFileRepository.save(boardFileEntity); // 7-2. DB에 저장 (tb_board_file)
+            }
         }
     }
 

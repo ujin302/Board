@@ -16,8 +16,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(resourcePath)
-                .addResourceLocations(savePath);
+        registry.addResourceHandler(resourcePath) // 웹에서 접근할 URL
+                .addResourceLocations(savePath); // 실제 파일이 존재하는 경로
         // resourcePath 로 접근하면 savePath에서 찾는다!
     }
 }
