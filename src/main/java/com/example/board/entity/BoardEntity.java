@@ -54,6 +54,14 @@ public class BoardEntity extends BaseEntity{
     private List<BoardFileEntity> boardFileEntityList = new ArrayList<>(); // DB 상에는 List 형식으로 정의되는 것은 아님
 
 
+    @OneToMany( // 부모가 삭제되면 자식도 삭제!
+            mappedBy = "boardEntity",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<CommentEntity> commentEntityList = new ArrayList<>();
+
     // 2. Data Entitiy에 저장
     // DTO의 값들을 Entity에 옮겨담는 함수 생성
     public static BoardEntity toSaveEntitiy(BoardDTO boardDTO) {

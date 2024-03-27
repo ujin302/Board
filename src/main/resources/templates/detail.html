@@ -36,7 +36,7 @@
     <tr th:if="${board.fileAttached == 1}">
         <th>image</th>
         <td th:each="fileName : ${board.storedFileName}">
-            <img th:src="@{|/upload/${fileName}|}" alt="">ㅁ
+            <img th:src="@{|/upload/${fileName}|}" alt="">
         </td>
     </tr>
 </table>
@@ -69,7 +69,7 @@
             // 요청방식 : post, 요청주소 : /comment/save, 요청데이터 : 작성자, 작성내용, 게시글 번호
             type : "post",
             url : "/comment/save",
-            data : {
+            data : { // json 형태로 데이터 전달 
                 "commentWriter" : writer,
                 "commentContents" : contents,
                 "boardId" : id
