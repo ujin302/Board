@@ -44,6 +44,9 @@ public class BoardDTO {
 
     // 게시물 관련 Data
     public BoardDTO(Long id, String boardWriter, String boardTitle, int boardHits, LocalDateTime boardCreatedTime) {
+        // this.id 위에서 정의한 변수
+        // id 매개 변수
+        // 매개변수 값을 가져와
         this.id = id;
         this.boardWriter = boardWriter;
         this.boardTitle = boardTitle;

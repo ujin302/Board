@@ -5,27 +5,8 @@
     <title>index</title>
 </head>
 <body>
-<!--버튼을 클릭했을 때, 주소 요청 -->
-    <button onclick="saveReq()">글작성</button>
-<!--    링크를 통해, 주소 요청 -->
-<!--    <a href="/board/save">글작성(링크)</a>-->
-
-    <button onclick="listReq()">글목록</button>
-    <button onclick="pagingReq()">페이지목록</button>
-
+<!--link 클릭은 get 방식! -->
+<a href="/member/save">회원가입</a>
+<a href="/member/login">로그인</a>
 </body>
-<script>
-    // 함수 정의
-    const saveReq = () => {
-        location.href = "/board/save";
-    }
-
-    const listReq = () => {
-        location.href = "/board";
-    }
-
-    const pagingReq = () => {
-        location.href = "/board/paging";
-    }
-</script>
 </html>

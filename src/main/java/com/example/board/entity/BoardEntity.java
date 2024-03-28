@@ -11,8 +11,8 @@ import java.util.List;
 
 // Entity : JPA가 관리하는 클래스
 // JPA : 객체와 관계형 데이터 베이스를 매핑해주는 기술
-@Getter
-@Setter
+@Getter // 변수값 가져오기
+@Setter // 변수값 설정
 @Builder // 모든 요소를 받는 package-private 생성자가 자동으로 생성
 @NoArgsConstructor // 파라미터가 없는 디폴트 생성자를 생성
 @AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자를 생성
