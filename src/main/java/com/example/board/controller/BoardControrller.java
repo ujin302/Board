@@ -1,7 +1,10 @@
 package com.example.board.controller;
 
 import com.example.board.dto.BoardDTO;
+import com.example.board.dto.CommentDTO;
+import com.example.board.entity.CommentEntity;
 import com.example.board.service.BoardService;
+import com.example.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +24,9 @@ import java.util.List;
 @RequestMapping("/board") // 주소가 board 시작되는 값 설정
 public class BoardControrller {
     // 생성자 주입 방식
-     private final BoardService boardService;
+    private final BoardService boardService;
+    private final CommentService commentService;
+
 
     // 1. save.html 호출
     @GetMapping("/save") // 주소 요청 : board/save
@@ -71,10 +76,12 @@ public class BoardControrller {
             2. 게시글 데이터를 가져와서 detail.html에 출력
          */
 
-        // 4-1. 조회수 +1
+        // 1-1. 조회수 +1
         boardService.updateHits(id);
-        // 4-2. 데이터 뿌리기
+        // 1-2. 데이터 뿌리기
         BoardDTO boardDTO = boardService.findById(id);
+        List<CommentDTO> commentDTOList = commentService.findAll(boardDTO.getId());
+        model.addAttribute("commentList", commentDTOList);
         model.addAttribute("board", boardDTO);
         model.addAttribute("page", pageable.getPageNumber());
 

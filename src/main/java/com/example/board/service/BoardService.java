@@ -142,8 +142,12 @@ public class BoardService {
         // 방법 2. Entity 형태로 데이터 받기
         BoardEntity BoardEntity = boardRepository.findById(id).orElse(null);
         if(BoardEntity != null) {
-            BoardDTO boardDTO = BoardDTO.toBoardDTO(BoardEntity); // Entity 객체를 DTO 객체에 저장
+            // 1. 게시물 정보 객체 변환 : Entity -> DTO
             // toBoardDTO 함수에서 부모 Entity를 통해 자식 Entity 접근
+            BoardDTO boardDTO = BoardDTO.toBoardDTO(BoardEntity);
+
+
+
             return boardDTO; // DTO 객체 반환
         } else {
             return null;

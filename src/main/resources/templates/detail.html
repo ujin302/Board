@@ -53,8 +53,23 @@
 
 <!--댓글 출력-->
 <div id="comment-list">
-
+    <table>
+        <tr>
+            <th>댓글id</th>
+            <th>작성자</th>
+            <th>내용</th>
+            <th>작성시간</th>
+        </tr>
+<!--        게시물 조회 시, 댓글 목록 출력-->
+        <tr th:each="comment: ${commentList}">
+            <td th:text="${comment.id}"></td>
+            <td th:text="${comment.commentWriter}"></td>
+            <td th:text="${comment.commentContents}"></td>
+            <td th:text="${comment.commentCreatedTime}"></td>
+        </tr>
+    </table>
 </div>
+
 </body>
 <script th:inline="javascript">
     // inline : [[${board.id}]] 와 같은 값들을 읽을 수 있음
@@ -74,8 +89,26 @@
                 "commentContents" : contents,
                 "boardId" : id
             },
-            success : function(res) {
-                console.log("요청 성공", res);
+            success: function (res) {
+                console.log("요청성공", res);
+                // 댓글 작성 후, 추가된 댓글 포함하여 댓글 목록 출력
+                let output = "<table>";
+                output += "<tr><th>댓글id</th>";
+                output += "<th>작성자</th>";
+                output += "<th>내용</th>";
+                output += "<th>작성시간</th></tr>";
+                for (let i in res) {
+                    output += "<tr>";
+                    output += "<td>" + res[i].id + "</td>";
+                    output += "<td>" + res[i].commentWriter + "</td>";
+                    output += "<td>" + res[i].commentContents + "</td>";
+                    output += "<td>" + res[i].commentCreatedTime + "</td>";
+                    output += "</tr>";
+                }
+                output += "</table>";
+                document.getElementById('comment-list').innerHTML = output;
+                document.getElementById('commentWriter').value = ''; // 초기화
+                document.getElementById('commentContents').value = ''; // 초기화
             },
             error : function(err) {
                 console.log("요청 실패", err);
