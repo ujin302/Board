@@ -1,10 +1,10 @@
 package com.example.board.controller;
 
+import com.example.board.dto.BoardDTO;
 import com.example.board.dto.MemberDTO;
 import com.example.board.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -83,4 +83,41 @@ public class MemberController {
         return "detailMember";
     }
 
+    @GetMapping("update")
+    public String updateForm(HttpSession session, Model model) {
+        System.out.println(session);
+        String myEmail = session.getAttribute("loginEmail").toString();
+        MemberDTO memberDTO = memberService.updateForm(myEmail);
+        model.addAttribute("updateMember", memberDTO);
+        return "updateMember";
+    }
+
+    @PostMapping("update")
+    public String update(@ModelAttribute MemberDTO memberDTO) {
+        System.out.println(memberDTO);
+        MemberDTO member = memberService.update(memberDTO);
+        return "redirect:/member/"+memberDTO.getId();
+    }
+
+    @GetMapping("delete/{id}")
+    public String deleteMember(@PathVariable Long id) {
+        memberService.deleteMember(id);
+        return "redirect:/member";
+    }
+
+    @GetMapping("logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "index";
+    }
+
+    @PostMapping("email-check")
+    public @ResponseBody Boolean emailCheck(@RequestParam("memberEmail") String memberEmail) {
+        // Ajax 사용시, ResponseBody 해당 어노테이션 필수
+        System.out.println("member Email = " + memberEmail);
+        Boolean checkResult = memberService.emailCheck(memberEmail);
+        System.out.println("checkResult = " + checkResult);
+
+        return checkResult;
+    }
 }

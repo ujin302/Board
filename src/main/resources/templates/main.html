@@ -5,9 +5,17 @@
     <title>main</title>
 </head>
 <body>
-session 값 확인 : <p th:text="${session.loginEmail}"></p>
+<P>session 값 확인 : [(${session.loginEmail})]</P>
 <br>
+<a></a>
+<h3>회원 메뉴</h3>
 <a href="/member">회원목록</a>
+<a href="/member/update">내 정보 수정하기</a>
+<a href="/member/logout">로그아웃</a>
+
+<br><br><br>
+
+<h3>게시물 메뉴</h3>
 <!--버튼을 클릭했을 때, 주소 요청 -->
 <button onclick="saveReq()">글작성</button>
 <!--    링크를 통해, 주소 요청 -->

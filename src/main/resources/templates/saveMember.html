@@ -3,23 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>saveMember</title>
+    <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous">
+    </script>
+    <!-- 제이쿼리 사용하기 위한 script 태그 -->
 </head>
 <body>
 <!--action 속성 : form에 작성한 데이터를 어디로 보낼지 지정-->
 <p>Post 방식</p>
 <form action="/member/save" method="post">
-    이메일: <input type="text" name="memberEmail"> <br>
+    이메일: <input type="text" name="memberEmail" id="memberEmail" onkeyup="emailCheck()"> <br>
+<!--    onkeyup="emailCheck()" : 입력할 때마다 emailCheck 힘수를 호출하는 속성 -->
+    <span id="check-result"></span> <br>
     아이디: <input type="text" name="memberId"> <br>
     비밀번호: <input type="password" name="memberPassword"> <br>
-    <input type="submit" value="회원가입">
+    <input type="submit" value="회원가입" id="submitBtn" >
 <!--    type="submit" 을 통해 form에 데이터를 담아서 서버에게 전송된다. -->
 </form>
-<p>Get 방식</p>
-<form action="/member/save1" method="get">
-    이메일: <input type="text" name="memberEmail"> <br>
-    아이디: <input type="text" name="memberId"> <br>
-    비밀번호: <input type="password" name="memberPassword"> <br>
-    <input type="submit" value="회원가입">
-</form>
+<!--<p>Get 방식</p>-->
+<!--<form action="/member/save1" method="get">-->
+<!--    이메일: <input type="text" name="memberEmail"> <br>-->
+<!--    <span id="check-result">=</span>-->
+<!--    아이디: <input type="text" name="memberId"> <br>-->
+<!--    비밀번호: <input type="password" name="memberPassword"> <br>-->
+<!--    <input type="submit" value="회원가입">-->
+<!--</form>-->
 </body>
+<script>
+    function emailCheck() {
+        const email = document.getElementById("memberEmail").value;
+        const checkResult = document.getElementById("check-result");
+        const submitBtn = document.getElementById("submitBtn");
+        console.log("입력값 : " + email);
+
+        $.ajax({
+            // 요청 방식 : post, url : "email-check", data : 이메일
+            type : "post",
+            url : "/member/email-check",
+            data: {
+                "memberEmail" : email
+            },
+            success : function (res) {
+                if(res) {
+                    console.log("사용 가능한 이메일")
+                    checkResult.innerHTML = "사용 가능한 이메일"
+                    checkResult.style.color="green"
+                    submitBtn.disabled = false
+                    // $(".submitBtn").prop("disabled", false);
+
+                }else {
+                    console.log("이미 사용중인 이메일")
+                    checkResult.innerHTML = "이미 사용중인 이메일"
+                    checkResult.style.color = "red"
+                    submitBtn.disabled = true
+                    // $(".submitBtn").prop("disabled", true);
+                }
+            },
+            error : function (err) {
+                console.log("요청 실패",err);
+            }
+        })
+    }
+</script>
 </html>

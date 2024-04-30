@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>disabled</title>
+</head>
+<body>
+<button id="submitBtn" >회원가입</button>
+<button onclick="disFun()">활성화</button>
+<button onclick="Fun()">비활성화</button>
+</body>
+<script>
+    function Fun() {
+        const submitBtn = document.getElementById("submitBtn")
+        submitBtn.disabled = true
+    }
+
+    function disFun() {
+        const submitBtn = document.getElementById("submitBtn")
+        submitBtn.disabled = false
+    }
+
+</script>
+</html>
