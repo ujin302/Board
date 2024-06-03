@@ -20,8 +20,8 @@ public class MemberEntity {
     @Column(nullable = false, unique = true)
     private String memberEmail;
 
-    @Column(nullable = false)
-    private String memberId;
+    @Column(nullable = false, unique = true)
+    private String memberUserName;
 
     @Column(nullable = false)
     private String memberPassword;
@@ -30,7 +30,7 @@ public class MemberEntity {
         MemberEntity memberEntity = new MemberEntity();
 
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
-        memberEntity.setMemberId(memberDTO.getMemberId());
+        memberEntity.setMemberUserName(memberDTO.getMemberUserName());
         memberEntity.setMemberPassword(memberDTO.getMemberPassword());
 
         return memberEntity;
@@ -41,7 +41,7 @@ public class MemberEntity {
 
         memberEntity.setId(memberDTO.getId());
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
-        memberEntity.setMemberId(memberDTO.getMemberId());
+        memberEntity.setMemberUserName(memberDTO.getMemberUserName());
         memberEntity.setMemberPassword(memberDTO.getMemberPassword());
         return memberEntity;
     }

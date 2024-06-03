@@ -1,0 +1,1 @@
+delete from tb_board where id =2;

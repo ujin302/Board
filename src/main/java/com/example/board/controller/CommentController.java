@@ -1,7 +1,6 @@
 package com.example.board.controller;
 
 import com.example.board.dto.CommentDTO;
-import com.example.board.repository.CommentRepository;
 import com.example.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,6 @@ import java.util.List;
 @RequestMapping("/comment")
 public class CommentController {
     private final CommentService commentService;
-
     @PostMapping("/save")
     public ResponseEntity save(@ModelAttribute CommentDTO commentDTO) {
         // @ResponseBody : ajax 문법

@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
     // 이메일로 회원 정보 조회
     // Optional : Null 값 방지
-    Optional<MemberEntity> findByMemberEmail(String memderEmail);
+    Optional<MemberEntity> findByMemberEmail(String memberEmail);
 }

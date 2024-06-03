@@ -29,12 +29,13 @@ public class BoardService {
     private final BoardFileRepository boardFileRepository;
 
     // 1. DB에 Data 저장
-    public void save(BoardDTO boardDTO) throws IOException {
+    public void save(BoardDTO boardDTO, String userName) throws IOException {
         // throws IOException : save 메소드에서 발생한 예외를 상위 메소드인 BoardService 에서 처리하기 위해 사용Z
         // 상위에서 처리하는게 더 올바른 경우도 있고 해당 메소드에서 처리하는게 더 올바른 경우가 있다!
 
+        boardDTO.setBoardWriter(userName);
         // 파일 첨부 여부에 따라 로직 분리
-        if(boardDTO.getBoardFile().isEmpty()) {
+        if(boardDTO.getBoardFile().isEmpty() || boardDTO.getBoardFile().get(0).isEmpty()) {
             // 첨부 파일 X
 
             // 1. DTO의 값들을 Entity에 옮겨담는 함수 호출

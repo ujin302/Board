@@ -11,7 +11,7 @@ import lombok.*;
 public class MemberDTO {
     private Long id;
     private String memberEmail;
-    private String memberId;
+    private String memberUserName;
     private String memberPassword;
 
     public static MemberDTO toMemberDTO(MemberEntity memberEntity) {
@@ -19,7 +19,7 @@ public class MemberDTO {
 
         memberDTO.setId(memberEntity.getId());
         memberDTO.setMemberEmail(memberEntity.getMemberEmail());
-        memberDTO.setMemberId(memberEntity.getMemberId());
+        memberDTO.setMemberUserName(memberEntity.getMemberUserName());
         memberDTO.setMemberPassword(memberEntity.getMemberPassword());
 
         return memberDTO;

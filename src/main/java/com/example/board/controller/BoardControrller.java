@@ -2,8 +2,10 @@ package com.example.board.controller;
 
 import com.example.board.dto.BoardDTO;
 import com.example.board.dto.CommentDTO;
+import com.example.board.dto.MemberDTO;
 import com.example.board.service.BoardService;
 import com.example.board.service.CommentService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,11 +38,13 @@ public class BoardControrller {
 
     // 2. board/save 화면에서 '글작성' Button 클릭 시, DB에 데이터 저장 & main 화면 넘어감
     @PostMapping("/save")
-    public String save(@ModelAttribute BoardDTO boardDTO) throws IOException {
+    public String save(@ModelAttribute BoardDTO boardDTO, HttpSession session) throws IOException {
         // ModelAttribute : BoardDTO에 정의되어 있는 값들 받음
         System.out.println("BoardDTO = " + boardDTO);
+        System.out.println("BoardDTO = " + session.getAttribute("loginUserName"));
+
         // DB에 데이터 저장
-        boardService.save(boardDTO);
+        boardService.save(boardDTO, session.getAttribute("loginUserName").toString());
 
         // main.html 화면 이동
         return "main";

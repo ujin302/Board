@@ -7,6 +7,7 @@ import com.example.board.repository.BoardRepository;
 import com.example.board.repository.CommentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.util.Optional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository; // 객체 변환 시, BoardEntity 필요함
-
+//    private final PasswordEncoder passwordEncoder;
 
 
 

@@ -59,6 +59,7 @@ public class MemberController {
 
             // HttpSession를 사용하여 로그인 상태 유지
             session.setAttribute("loginEmail", loginResult.getMemberEmail());
+            session.setAttribute("loginUserName", loginResult.getMemberUserName());
             return "main";
         } else {
             return "login";
@@ -67,10 +68,11 @@ public class MemberController {
 
     @GetMapping
     public String findAll(Model model) {
+        System.out.println("Url : /member, 응답 : o");
         List<MemberDTO> memberDTOList = memberService.findAll();
         // view에 가져갈 데이터를 model에 담아서 사용
         model.addAttribute("memberList", memberDTOList);
-
+        System.out.println("종료");
         return "listMember";
     }
 
